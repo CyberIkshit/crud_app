@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import {useHistory } from "react-router";
 import axios from "axios";
-function LogUser({setToken}){
-    
+
+function LogUser({ setToken }) {
+
     // const history = useHistory();
     const [data, logUser] = useState({
         email: "",
@@ -14,7 +14,7 @@ function LogUser({setToken}){
     const onInputChange = e => {
         logUser({ ...data, [e.target.name]: e.target.value });
     };
-    if(setToken==null)
+    if (setToken == null)
         return <div>
             <h1>Already Logged In</h1>
             <a href="/">Return to the Home page</a>
@@ -22,17 +22,16 @@ function LogUser({setToken}){
     const onSubmit = async e => {
         e.preventDefault();
         // if(password==confirm_password)
-        try{
-        const token=await axios.post("https://reqres.in/api/login", data);
-        setToken(token.data.token);
-        // else
-        // alert("Password fields don't match");
-        console.log(setToken);
-        // if(token.status==200)
-        //     history.push("/");
+        try {
+            const token = await axios.post("https://reqres.in/api/login", data);
+            setToken(token.data.token);
+            // else
+            // alert("Password fields don't match");
+            console.log(setToken);
+            // if(token.status==200)
+            //     history.push("/");
         }
-        catch(e)
-        {
+        catch (e) {
             alert(e.message);
         }
     };
@@ -75,7 +74,7 @@ function LogUser({setToken}){
         </div> */}
                     <button className="btn btn-primary btn-block" >Login</button>
 
-                    
+
                 </form>
                 <a href="/users/register">New User?Register Here</a>
             </div>

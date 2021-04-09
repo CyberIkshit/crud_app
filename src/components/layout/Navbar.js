@@ -1,6 +1,11 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 function Navbar ({isLoggedIn}) {
+  function logout(){
+    sessionStorage.clear();
+    window.location.reload();
+  }
+  const status=isLoggedIn?"Logout":"Login/Register";
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
@@ -31,8 +36,8 @@ function Navbar ({isLoggedIn}) {
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-              <NavLink className="nav-link" exact to="/">
-                {isLoggedIn?"Logout":"Login/Register"}
+              <NavLink className="nav-link" exact to="/" onClick={()=>{logout()}}>
+                {status}
               </NavLink>
             </li>
           </ul>

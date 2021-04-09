@@ -29,14 +29,16 @@ import useToken from "./components/auth/useToken"
 function App() {
   // const token=getToken();
   const { token, setToken } = useToken();
-  if(token==null)
-    return <Login setToken={setToken}/>
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    console.log(isLoggedIn);
+  if (token == null && window.location.pathname!="/users/register")
+    return <Login setToken={setToken} />
+    if (token == null && window.location.pathname=="/users/register")
+    return <Registration setToken={setToken} />
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  console.log(isLoggedIn);
   return (
     <Router>
       <div className="App">
-        <Navbar isLoggedIn={isLoggedIn}/>
+        <Navbar isLoggedIn={isLoggedIn} />
 
         <Switch>
           <Route exact path="/" component={Home} />
