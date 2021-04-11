@@ -28,4 +28,4 @@ $ npm build
 
 ## Refer to REQRES API documentation for more info regarding API used:
 
-https://reqres.in/
+> https://reqres.in/
