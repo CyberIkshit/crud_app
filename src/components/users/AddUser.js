@@ -23,7 +23,7 @@ const AddUser = () => {
     const temp_data = JSON.parse(sessionStorage.getItem('data'));
     var last = temp_data.length;
     temp_data[last] = data;
-    temp_data[last].id = last + 1;
+    temp_data[last].id = temp_data[last-1].id + 1;
     sessionStorage.setItem('data', JSON.stringify(temp_data));
     history.push("/");
   };
