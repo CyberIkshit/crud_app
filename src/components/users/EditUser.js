@@ -8,11 +8,16 @@ const EditUser = () => {
   const [data, setUser] = useState({
     first_name: "",
     last_name: "",
-    email: "",  
-    // phone: "",
+    email: "",
   });
-
-  const { first_name, last_name, email} = data;
+  const token = sessionStorage.getItem('token');
+  const authAxios = axios.create({
+    baseURL: "https://reqres.in/api",
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
+  const { first_name, last_name, email } = data;
   const onInputChange = e => {
     setUser({ ...data, [e.target.name]: e.target.value });
   };
@@ -23,14 +28,35 @@ const EditUser = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    await axios.put('https://reqres.in/api/users/${id}', data);
+    await authAxios.put('https://reqres.in/api/users/${id}', data);
     history.push("/");
   };
 
-  const loadUser = async () => {
-    const result = await axios.get(`https://reqres.in/api/users/${id}`);
-    setUser(result.data.data);
+  const loadUser = () => {
+    const temp_data = JSON.parse(sessionStorage.getItem('data'));
+    var temp;
+    for (var i = 0; i < temp_data.length; i++) {
+      if (temp_data[i].id == id) {
+        temp = i;
+        break;
+      }
+    }
+    setUser(temp_data[temp]);
   };
+  function updateUser() {
+    const temp_data = JSON.parse(sessionStorage.getItem('data'));
+    var temp;
+    for (var i = 0; i < temp_data.length; i++) {
+      if (temp_data[i].id == id) {
+        temp = i;
+        break;
+      }
+    }
+    temp_data[temp].first_name = data.first_name;
+    temp_data[temp].last_name = data.last_name;
+    temp_data[temp].email = data.email;
+    sessionStorage.setItem('data', JSON.stringify(temp_data));
+  }
   return (
     <div className="container">
       <div className="w-75 mx-auto shadow p-5">
@@ -40,7 +66,7 @@ const EditUser = () => {
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter Your Name"
+              placeholder="First Name"
               name="first_name"
               value={first_name}
               onChange={e => onInputChange(e)}
@@ -50,7 +76,7 @@ const EditUser = () => {
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter Your Username"
+              placeholder="Last Name"
               name="last_name"
               value={last_name}
               onChange={e => onInputChange(e)}
@@ -60,37 +86,16 @@ const EditUser = () => {
             <input
               type="email"
               className="form-control form-control-lg"
-              placeholder="Enter Your E-mail Address"
+              placeholder="E-mail Address"
               name="email"
               value={email}
               onChange={e => onInputChange(e)}
             />
           </div>
-          {/* <div className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Enter Your Phone Number"
-              name="phone"
-              value={phone}
-              onChange={e => onInputChange(e)}
-            />
-          </div> */}
-          {/* <div className="form-group">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Enter Your Website Name"
-              name="avatar"
-              value={avatar}
-              onChange={e => onInputChange(e)}
-            />
-          </div> */}
-          <button className="btn btn-primary btn-block" >Update</button>
+          <button className="btn btn-primary btn-block" onClick={() => updateUser()}>Update</button>
         </form>
       </div>
     </div>
   );
 };
-
 export default EditUser;

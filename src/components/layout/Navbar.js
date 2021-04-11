@@ -23,7 +23,6 @@ function Navbar ({isLoggedIn}) {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
@@ -42,7 +41,6 @@ function Navbar ({isLoggedIn}) {
             </li>
           </ul>
         </div>
-        
         <Link className="btn btn-outline-light" to="/users/add">Add User</Link>
       </div>
     </nav>

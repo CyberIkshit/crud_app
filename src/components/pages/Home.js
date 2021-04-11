@@ -1,35 +1,64 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
-const Home = () => {
+function Home() {
   const [data, setData] = useState([{}]);
-
+  const token = sessionStorage.getItem('token');
   useEffect(() => {
     loadUsers();
-    // console.log(data);
   }, []);
-
-  const loadUsers = async () => {
-    const result = await axios.get("https://reqres.in/api/users");
-    // console.log(result.data.data[0]);
-    // for (var i=0;result.data.data[i]!=null; i++)
-    setData(result.data.data);
-    // console.log(data[0]);
+  async function loadUsers(updated) {
+    if (sessionStorage.getItem('firstTime') == 1) {
+      const result = await axios.get("https://reqres.in/api/users", {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      });
+      setData(result.data.data);
+      sessionStorage.setItem('firstTime', 0)
+      sessionStorage.setItem('data', JSON.stringify(result.data.data))
+    }
+    else if (updated != null) {
+      setData(updated);
+      sessionStorage.setItem('data', JSON.stringify(updated))
+    }
+    else {
+      setData(JSON.parse(sessionStorage.getItem('data')));
+    }
   };
 
   const deleteUser = async id => {
-    await axios.delete(`https://reqres.in/api/users/${id}`);
-    loadUsers();
+    try {
+      const res = await axios.delete(`https://reqres.in/api/users/${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      });
+      if (res.status == 204) {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].id == id) {
+            id = i;
+            break;
+          }
+        }
+        if (data[i] != null && data[i] != undefined)
+          await delete (data[id]);
+        const filtered = data.filter(function (el) {
+          return el != null;
+        });
+        loadUsers(filtered)
+      }
+    }
+    catch (e) {
+      alert(e.message);
+    }
   };
-
   return (
     <div className="container">
       <div className="py-4">
         <table class="table border shadow">
           <thead class="thead-light">
             <tr>
-              <th scope="col">#</th>
               <th scope="col">Avatar</th>
               <th scope="col">Name</th>
               <th scope="col">Email</th>
@@ -37,11 +66,9 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-
-            {data.map((user, index) => (
+            {data?.map((user) => (
               <tr>
-                <th scope="row" className="align-middle">{user.id}</th>
-                <td><img src={user.avatar}></img></td>
+                <td><img src={user.avatar} alt={user.avatar}></img></td>
                 <td className="align-middle">{user.first_name + " " + user.last_name}</td>
                 <td className="align-middle">{user.email}</td>
                 <td className="align-middle">
@@ -53,7 +80,12 @@ const Home = () => {
       </Link>
                   <Link
                     class="btn btn-danger"
-                    onClick={() => deleteUser(user.id)}
+                    onClick={() => {
+                      const confirm = window.confirm("Confirm Delete");
+                      if (confirm == true) {
+                        deleteUser(user.id);
+                      }
+                    }}
                   >
                     Delete
       </Link>
@@ -66,7 +98,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
-
-

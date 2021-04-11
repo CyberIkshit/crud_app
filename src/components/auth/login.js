@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-
 function LogUser({ setToken }) {
-
-    // const history = useHistory();
     const [data, logUser] = useState({
         email: "",
         password: ""
-        // confirm_password:"",
-        // registrationErrors:""
     });
     const { email, password } = data;
     const onInputChange = e => {
@@ -21,22 +16,15 @@ function LogUser({ setToken }) {
         </div>
     const onSubmit = async e => {
         e.preventDefault();
-        // if(password==confirm_password)
         try {
             const token = await axios.post("https://reqres.in/api/login", data);
             setToken(token.data.token);
-            // else
-            // alert("Password fields don't match");
             console.log(setToken);
-            // if(token.status==200)
-            //     history.push("/");
         }
         catch (e) {
             alert(e.message);
         }
     };
-
-
     return (
         <div className="container">
             <div className="w-75 mx-auto shadow p-5">
@@ -62,24 +50,11 @@ function LogUser({ setToken }) {
                             onChange={e => onInputChange(e)}
                         />
                     </div>
-                    {/* <div className="form-group">
-          <input
-            type="password"
-            className="form-control form-control-lg"
-            placeholder="Enter Confirm Password"
-            name="confirm_password"
-            value={confirm_password}
-            onChange={e => onInputChange(e)}
-          />
-        </div> */}
                     <button className="btn btn-primary btn-block" >Login</button>
-
-
                 </form>
-                <a href="/users/register">New User?Register Here</a>
+                <center><a href="/users/register">New User?Register Here</a></center>
             </div>
         </div>
     );
-
 };
 export default LogUser;

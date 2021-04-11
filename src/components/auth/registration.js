@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import axios from "axios";
 function RegUser ({setToken}) {
-    let history = useHistory();
     const [data, regUser] = useState({
         email: "",
         password: ""
-        // confirm_password:"",
-        // registrationErrors:""
     });
     const { email, password } = data;
     const onInputChange = e => {
@@ -20,7 +16,6 @@ function RegUser ({setToken}) {
         </div>
     const onSubmit = async e => {
         e.preventDefault();
-        // if(password==confirm_password)
         try{
             console.log(data);
         const token=await axios.post("https://reqres.in/api/register", data);
@@ -29,9 +24,6 @@ function RegUser ({setToken}) {
         {
             alert(e.message);
         }
-        // else
-        // alert("Password fields don't match");
-        // history.push("/");
     };
 
 
@@ -60,19 +52,9 @@ function RegUser ({setToken}) {
                             onChange={e => onInputChange(e)}
                         />
                     </div>
-                    {/* <div className="form-group">
-          <input
-            type="password"
-            className="form-control form-control-lg"
-            placeholder="Enter Confirm Password"
-            name="confirm_password"
-            value={confirm_password}
-            onChange={e => onInputChange(e)}
-          />
-        </div> */}
                     <button className="btn btn-primary btn-block" >Register</button>
                 </form>
-                <a href="/users/login" >Already Registered?Login Here</a>
+                <center><a href="/users/login">Already Registered?Login Here</a></center>
             </div>
         </div>
     );
